@@ -93,29 +93,36 @@ export default {
       }
     },
     format(nVal) {
-      let pos = this.pos
-      let bob = nVal.substring(0, pos + 1) + nVal.substring(pos + 2, nVal.length )
+      let dob = nVal.replace(/[^0-9]/ig, "")
+      //超出范围 
+      if (dob.length > 8) {
+        return false
+      }
 
-      //与默认对比
-      let diff = ''
-      for (let i = 0; i < inputDefault.length; i ++) {
-        if (bob[i] != inputDefault[i]) {
-          diff = diff + bob[i]
+      let val = inputDefault.split('')
+      let dk = 0
+      for (let i = 0; i < val.length; i ++) {
+        let item = val[i]
+        if ( item.match(/y|m|d/)) {
+          if (dob[dk]) {
+            val[i] = dob[dk]
+          }
+          dk = dk + 1
         }
       }
-      //输入非数字跳回
-      let patrn =  /^[0-9]*$/;  
-      if (!patrn.test(diff)) {
-        return false
-      } else {
-        return bob
-      }
+      val = val.join('')
+
+      return val
     }
   },
 
   watch: {
     birthday (nVal, oVal) {
       this.$emit('change', nVal)
+      
+      let fpos = this.getCursortPosition()
+      let pos = this.pos
+
       if (nVal === inputDefault || !nVal) {
         return
       }
@@ -134,31 +141,12 @@ export default {
         return
       }
 
-      let fpos = this.getCursortPosition()
-      let pos = this.pos
-
-      // let year = nVal.substring(0, 4)
-      // year = year.match(/\d*/)[0]
-      
-      // if (year[0] != 1 && year[0] != 2) {
-      //   this.birthday = oVal
-      //   this.setCaretPosition(pos)
-      //   return
-      // }
-      // let month = nVal.substring(4, 6)
-      // month = month.match(/\d*/)[0]
-
       if (pos == 3 || pos == 6) {
         pos = pos + 2
       } else {
         pos = pos + 1
       }
-      // console.log(nVal.substring(pos, 1) + nVal.substring(pos + 1, nVal.length ))
-      // console.log(oVal)
-      // if (nVal !== oVal) {
-      //   // 
-      // }
-
+      
       this.pos = pos
       this.setCaretPosition(pos)
     }
