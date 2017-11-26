@@ -8,6 +8,7 @@
     @mouseover="onMouseoverHandel"
     @mouseout="onMouseoutHandel"
     v-model="birthday"
+    v-on:keyup.delete="onDeleteHander"
   >
 </template>
 
@@ -60,7 +61,7 @@ export default {
         this.birthday = ''
       }
     },
-    // 获取光标位置
+    //获取光标位置
     getCursortPosition() {
       let ctrl = document.getElementById('vueBirthdayInput')
       var CaretPos = 0   // IE Support
@@ -74,7 +75,7 @@ export default {
         CaretPos = ctrl.selectionStart
       return (CaretPos)
     },
-    // 设置光标位置
+    //设置光标位置
     setCaretPosition(pos) {
       let textDom = document.getElementById('vueBirthdayInput')
       if(textDom.setSelectionRange) {
@@ -92,11 +93,19 @@ export default {
         range.select()
       }
     },
-    format(nVal) {
+    //回退事件
+    onDeleteHander() {
+      this.birthday = this.format(this.birthday, true)
+    },
+    //格式化
+    format(nVal, del) {
       let dob = nVal.replace(/[^0-9]/ig, "")
       //超出范围 
       if (dob.length > 8) {
         return false
+      }
+      if (del) {
+        dob = dob.substring(0, dob.length - 1)
       }
 
       let val = inputDefault.split('')
@@ -111,7 +120,6 @@ export default {
         }
       }
       val = val.join('')
-
       return val
     }
   },
@@ -131,7 +139,7 @@ export default {
         this.birthday = inputDefault
       }
       //正常输入
-      if (nVal.length > 11) {
+      // if (nVal.length > 11) {
         let val = this.format(nVal)
         if (val) {
           this.birthday = val
@@ -139,14 +147,14 @@ export default {
           this.birthday = oVal
         }
         return
-      }
+      // }
 
       if (pos == 3 || pos == 6) {
         pos = pos + 2
       } else {
         pos = pos + 1
       }
-      
+
       this.pos = pos
       this.setCaretPosition(pos)
     }
