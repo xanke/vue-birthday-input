@@ -1,8 +1,8 @@
 {
   "name": "vue-birthday-input",
-  "version": "0.0.1",
-  "description": "Input field component to display currency value based on Vue.",
-  "author": "Kevin Ongko",
+  "version": "0.2.0",
+  "description": "Vue birthady input tool",
+  "author": "xank",
   "main": "dist/vue-birthday-input.min.js",
   "repository": {
     "type": "git",
