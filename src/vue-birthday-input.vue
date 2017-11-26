@@ -1,7 +1,6 @@
 <template>
   <input
     id="vueBirthdayInput"
-    ref="vueBirthdayInput"
     :placeholder="placeholder"
     @focus="onFocusHandler"
     @click="onFocusHandler"
@@ -27,14 +26,15 @@ export default {
       type: String
     },
     value: {
-      default: 0,
+      default: '',
+      required: true,
       type: [Number, String]
     }
   },
   data: () => ({
     birthday: '',
     pos: 0,
-    verification: false
+    verification: false,
   }),
   computed: {
  
@@ -49,10 +49,11 @@ export default {
       if (this.birthday == '' || this.birthday == this.format) {
         this.birthday = this.format
         pos = 0
-      }
-      if (fpos > pos) {
         this.setCaretPosition(pos)
       }
+      // if (fpos > pos) {
+      //   this.setCaretPosition(pos)
+      // }
     },
     //鼠标经过
     onMouseoverHandel (e) {
@@ -127,7 +128,6 @@ export default {
                 return false
               }
             }
-
             if ( item == 'm') {
               month = month + dob[dk]
               if (month[0] != 0 && month[0] != 1 ) {
@@ -142,7 +142,8 @@ export default {
             if ( item == 'd') {
               day = day + dob[dk]
               if (day.length == 1) {
-                if (moment(year + month + day + '0', 'YYYYMMDD').format('YYYYMMDD') == "Invalid date") {
+
+                if (day != 0 && moment(year + month + day + '0', 'YYYYMMDD').format('YYYYMMDD') == "Invalid date") {
                   return false
                 }
               } else {
@@ -157,8 +158,9 @@ export default {
       }
       //完成输入
       if (dob.length == 8) {
+        this.value = '23'
+        // this.value = this.birthday
         this.$emit('success')
-        this.value = dob
       }
 
       val = val.join('')
@@ -168,39 +170,39 @@ export default {
 
   watch: {
     birthday (nVal, oVal) {
-      this.$emit('change', nVal)
-      
-      let fpos = this.getCursortPosition()
-      let pos = this.pos
 
-      if (nVal === this.format || !nVal) {
-        return
-      }
-      //如被全选输入
-      if (nVal.length == 1) {
-        this.birthday = this.format
-      }
-      //正常输入
-      let val = this.dobFormat(nVal)
-      if (val) {
-        this.birthday = val
-      } else {
-        this.birthday = oVal
-      }
-      return
+      if (nVal !== oVal) {
+        this.$emit('change', nVal)
+        let fpos = this.getCursortPosition()
+        let pos = this.pos
 
-      if (pos == 3 || pos == 6) {
-        pos = pos + 2
-      } else {
-        pos = pos + 1
-      }
+        if (nVal === this.format || !nVal) {
+          return
+        }
 
-      this.pos = pos
-      this.setCaretPosition(pos)
+        //正常输入
+        let val = this.dobFormat(nVal)
+        if (val) {
+          this.birthday = val
+        } else {
+          this.birthday = oVal
+        }
+
+        if (nVal.length > this.format.length) {
+          pos = pos + 1
+          this.pos = pos
+          this.setCaretPosition(pos)
+        }
+      }
     }
   },
 
   mounted () {
+    let dob = this.dobFormat(this.value)
+    if (dob) {
+      this.birthday = dob
+    }
+    
   }
 }
 </script>
