@@ -31,11 +31,12 @@ export default {
       type: [Number, String]
     }
   },
-  data: () => ({
-    birthday: '',
-    pos: 0,
-    verification: false,
-  }),
+  data () {
+    return {
+      birthday: '',
+      pos: 0
+    }
+  },
   computed: {
  
   },
@@ -158,9 +159,7 @@ export default {
       }
       //完成输入
       if (dob.length == 8) {
-        this.value = '23'
-        // this.value = this.birthday
-        this.$emit('success')
+        this.$emit('input', dob)
       }
 
       val = val.join('')
@@ -170,7 +169,6 @@ export default {
 
   watch: {
     birthday (nVal, oVal) {
-
       if (nVal !== oVal) {
         this.$emit('change', nVal)
         let fpos = this.getCursortPosition()
@@ -202,7 +200,6 @@ export default {
     if (dob) {
       this.birthday = dob
     }
-    
   }
 }
 </script>
