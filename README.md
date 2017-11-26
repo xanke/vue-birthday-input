@@ -49,8 +49,8 @@ export default {
 ## Props
 |Props|Description|Required|Type|Default|
 |-----|-----------|--------|----|-------|
-|placeholder|Placeholder|false|String|'出生日期'|
+|placeholder|Placeholder|false|String|出生日期|
 
 ## License
 
-Vue-Numeric is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+Vue-birthday-input is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
