@@ -15,16 +15,21 @@
 <script>
 import moment from 'moment'
 
-const inputDefault = 'yyyy年mm月dd日'
 export default {
   name: 'vue-birthday-input',
   props: {
-    //placeholder.
     placeholder: {
       default: '出生日期',
-      required: false,
       type: String,
     },
+    format: {
+      default: 'yyyy年mm月dd日',
+      type: String
+    },
+    value: {
+      default: 0,
+      type: [Number, String]
+    }
   },
   data: () => ({
     birthday: '',
@@ -41,8 +46,8 @@ export default {
       let pos = this.pos
       let fpos = this.getCursortPosition()
 
-      if (this.birthday == '' || this.birthday == inputDefault) {
-        this.birthday = inputDefault
+      if (this.birthday == '' || this.birthday == this.format) {
+        this.birthday = this.format
         pos = 0
       }
       if (fpos > pos) {
@@ -52,12 +57,12 @@ export default {
     //鼠标经过
     onMouseoverHandel (e) {
       if (this.birthday == '') {
-        this.birthday = inputDefault
+        this.birthday = this.format
       }
     },
     //鼠标退出
     onMouseoutHandel (e) {
-      if (this.birthday == inputDefault) {
+      if (this.birthday == this.format) {
         this.birthday = ''
       }
     },
@@ -95,30 +100,67 @@ export default {
     },
     //回退事件
     onDeleteHander() {
-      this.birthday = this.format(this.birthday, true)
+      this.birthday = this.dobFormat(this.birthday, true)
     },
     //格式化
-    format(nVal, del) {
+    dobFormat(nVal, del) {
       let dob = nVal.replace(/[^0-9]/ig, "")
-      //超出范围 
+
       if (dob.length > 8) {
         return false
       }
       if (del) {
         dob = dob.substring(0, dob.length - 1)
       }
-
-      let val = inputDefault.split('')
+      let val = this.format.split('')
       let dk = 0
+
+      let year = '', month = '', day = ''
       for (let i = 0; i < val.length; i ++) {
         let item = val[i]
         if ( item.match(/y|m|d/)) {
           if (dob[dk]) {
             val[i] = dob[dk]
+            if ( item == 'y') {
+              year = year + dob[dk]
+              if (year[0] != 1 && year[0] != 2 ) {
+                return false
+              }
+            }
+
+            if ( item == 'm') {
+              month = month + dob[dk]
+              if (month[0] != 0 && month[0] != 1 ) {
+                return false
+              }
+              if (month.length == 2) {
+                if (moment(month, 'MM').format('MM') == "Invalid date") {
+                  return false
+                }
+              }
+            }
+            if ( item == 'd') {
+              day = day + dob[dk]
+              if (day.length == 1) {
+                if (moment(year + month + day + '0', 'YYYYMMDD').format('YYYYMMDD') == "Invalid date") {
+                  return false
+                }
+              } else {
+                if (moment(year + month + day, 'YYYYMMDD').format('YYYYMMDD') == "Invalid date") {
+                  return false
+                }
+              }
+            }
           }
           dk = dk + 1
         }
       }
+      //完成输入
+      if (dob.length == 8) {
+        this.$emit('success')
+        this.value = dob
+      }
+
       val = val.join('')
       return val
     }
@@ -131,23 +173,21 @@ export default {
       let fpos = this.getCursortPosition()
       let pos = this.pos
 
-      if (nVal === inputDefault || !nVal) {
+      if (nVal === this.format || !nVal) {
         return
       }
       //如被全选输入
       if (nVal.length == 1) {
-        this.birthday = inputDefault
+        this.birthday = this.format
       }
       //正常输入
-      // if (nVal.length > 11) {
-        let val = this.format(nVal)
-        if (val) {
-          this.birthday = val
-        } else {
-          this.birthday = oVal
-        }
-        return
-      // }
+      let val = this.dobFormat(nVal)
+      if (val) {
+        this.birthday = val
+      } else {
+        this.birthday = oVal
+      }
+      return
 
       if (pos == 3 || pos == 6) {
         pos = pos + 2
