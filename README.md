@@ -47,9 +47,11 @@ export default {
 ```
 
 ## Props
-|Props|Description|Required|Type|Default|
-|-----|-----------|--------|----|-------|
-|placeholder|Placeholder|false|String|出生日期|
+|参数|说明|必须|类型|可选值|默认值|
+|-----|-----------|--------|----|----|-------|
+|placeholder|占位符|否|String|—|出生日期|
+|formatView|显示格式|否|String|yyyy/mm/dd / yyyy-mm-dd / mm/dd/yyyy|yyyy年mm月dd日|
+|format|输出格式|否|String|符合moment.format即可|YYYYMMDD|
 
 ## License
 

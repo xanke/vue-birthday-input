@@ -22,7 +22,11 @@ export default {
       type: String,
     },
     format: {
-      default: 'yyyy年mm月dd日',
+      default: 'YYYYMMDD',
+      type: String
+    },
+    formatView: {
+      default: 'yyyy/mm/dd',
       type: String
     },
     value: {
@@ -38,7 +42,6 @@ export default {
     }
   },
   computed: {
- 
   },
   methods: {
     //获得焦点事件
@@ -47,24 +50,21 @@ export default {
       let pos = this.pos
       let fpos = this.getCursortPosition()
 
-      if (this.birthday == '' || this.birthday == this.format) {
-        this.birthday = this.format
+      if (this.birthday == '' || this.birthday == this.formatView) {
+        this.birthday = this.formatView
         pos = 0
         this.setCaretPosition(pos)
       }
-      // if (fpos > pos) {
-      //   this.setCaretPosition(pos)
-      // }
     },
     //鼠标经过
     onMouseoverHandel (e) {
       if (this.birthday == '') {
-        this.birthday = this.format
+        this.birthday = this.formatView
       }
     },
     //鼠标退出
     onMouseoutHandel (e) {
-      if (this.birthday == this.format) {
+      if (this.birthday == this.formatView) {
         this.birthday = ''
       }
     },
@@ -111,15 +111,18 @@ export default {
       if (dob.length > 8) {
         return false
       }
+      //删除
       if (del) {
         dob = dob.substring(0, dob.length - 1)
       }
-      let val = this.format.split('')
+      //数组化比对
+      let val = this.formatView.split('')
       let dk = 0
 
       let year = '', month = '', day = ''
       for (let i = 0; i < val.length; i ++) {
         let item = val[i]
+        item = item.toLowerCase()
         if ( item.match(/y|m|d/)) {
           if (dob[dk]) {
             val[i] = dob[dk]
@@ -159,9 +162,11 @@ export default {
       }
       //完成输入
       if (dob.length == 8) {
+        dob = moment(dob, 'YYYYMMDD').format(this.format)
         this.$emit('input', dob)
+      } else {
+        this.$emit('input', '')
       }
-
       val = val.join('')
       return val
     }
@@ -174,7 +179,7 @@ export default {
         let fpos = this.getCursortPosition()
         let pos = this.pos
 
-        if (nVal === this.format || !nVal) {
+        if (nVal === this.formatView || !nVal) {
           return
         }
 
@@ -186,7 +191,7 @@ export default {
           this.birthday = oVal
         }
 
-        if (nVal.length > this.format.length) {
+        if (nVal.length > this.formatView.length) {
           pos = pos + 1
           this.pos = pos
           this.setCaretPosition(pos)
@@ -197,7 +202,7 @@ export default {
 
   mounted () {
     let dob = this.dobFormat(this.value)
-    if (dob) {
+    if (dob != this.formatView) {
       this.birthday = dob
     }
   }
