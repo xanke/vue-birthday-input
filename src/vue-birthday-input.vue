@@ -48,8 +48,6 @@ export default {
     onFocusHandler (e) {
       this.$emit('focus', e)
       let pos = this.pos
-      let fpos = this.getCursortPosition()
-
       if (this.birthday == '' || this.birthday == this.formatView) {
         this.birthday = this.formatView
         pos = 0
@@ -57,13 +55,13 @@ export default {
       }
     },
     //鼠标经过
-    onMouseoverHandel (e) {
+    onMouseoverHandel () {
       if (this.birthday == '') {
         this.birthday = this.formatView
       }
     },
     //鼠标退出
-    onMouseoutHandel (e) {
+    onMouseoutHandel () {
       if (this.birthday == this.formatView) {
         this.birthday = ''
       }
@@ -171,12 +169,10 @@ export default {
       return val
     }
   },
-
   watch: {
     birthday (nVal, oVal) {
       if (nVal !== oVal) {
         this.$emit('change', nVal)
-        let fpos = this.getCursortPosition()
         let pos = this.pos
 
         if (nVal === this.formatView || !nVal) {
