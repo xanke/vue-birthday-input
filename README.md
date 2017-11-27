@@ -4,8 +4,8 @@ vue 生日输入组件
 [![npm](https://img.shields.io/npm/v/vue-birthday-input.svg)](https://www.npmjs.com/package/vue-birthday-input)
 [![npm](https://img.shields.io/npm/dt/vue-birthday-input.svg)](https://www.npmjs.com/package/vue-birthday-input)
 [![npm](https://img.shields.io/npm/dm/vue-birthday-input.svg)](https://www.npmjs.com/package/vue-birthday-input)
-[![Build Status](https://travis-ci.org/kevinongko/vue-birthday-input.svg?branch=master)](https://travis-ci.org/kevinongko/vue-birthday-input)
-[![Codecov](https://img.shields.io/codecov/c/github/kevinongko/vue-birthday-input.svg)](https://codecov.io/gh/kevinongko/vue-birthday-input)
+[![Build Status](https://travis-ci.org/xanke/vue-birthday-input.svg?branch=master)](https://travis-ci.org/xanke/vue-birthday-input)
+[![Codecov](https://img.shields.io/codecov/c/github/xanke/vue-birthday-input.svg)](https://codecov.io/gh/xanke/vue-birthday-input)
 [![npm](https://img.shields.io/npm/l/vue-birthday-input.svg)](http://opensource.org/licenses/MIT)
 
 
