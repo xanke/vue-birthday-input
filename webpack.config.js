@@ -1,5 +1,4 @@
 /* eslint-env node */
-
 const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 
@@ -17,6 +16,12 @@ module.exports = {
   },
   entry: './src/index.js',
   externals: {
+    'moment': {
+      commonjs: 'moment',
+      commonjs2: 'moment',
+      amd: 'moment',
+      root: 'moment'
+    }
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
