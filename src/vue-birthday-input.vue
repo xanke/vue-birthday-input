@@ -104,7 +104,6 @@ export default {
     //格式化
     dobFormat(nVal, del) {
       let dob = nVal.replace(/[^0-9]/ig, "")
-
       if (dob.length > 8) {
         return false
       }
@@ -120,16 +119,16 @@ export default {
       for (let i = 0; i < val.length; i ++) {
         let item = val[i]
         item = item.toLowerCase()
-        if ( item.match(/y|m|d/)) {
+        if (item.match(/y|m|d/)) {
           if (dob[dk]) {
             val[i] = dob[dk]
-            if ( item == 'y') {
+            if (item == 'y') {
               year = year + dob[dk]
               if (year[0] != 1 && year[0] != 2 ) {
                 return false
               }
             }
-            if ( item == 'm') {
+            if (item == 'm') {
               month = month + dob[dk]
               if (month[0] != 0 && month[0] != 1 ) {
                 return false
@@ -140,10 +139,9 @@ export default {
                 }
               }
             }
-            if ( item == 'd') {
+            if (item == 'd') {
               day = day + dob[dk]
               if (day.length == 1) {
-
                 if (day != 0 && moment(year + month + day + '0', 'YYYYMMDD').format('YYYYMMDD') == "Invalid date") {
                   return false
                 }
@@ -159,6 +157,7 @@ export default {
       }
       //完成输入
       if (dob.length == 8) {
+        dob = year + month + day
         dob = moment(dob, 'YYYYMMDD').format(this.format)
         this.$emit('input', dob)
       } else {
