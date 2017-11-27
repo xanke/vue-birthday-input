@@ -26,7 +26,7 @@ export default {
 ### 快速开始
 ```vue
 <template>
-  <vue-numeric v-model="birthday"></vue-numeric>
+  <birthday-input v-model="birthday"></birthday-input>
 </template>
 
 <script>
