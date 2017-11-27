@@ -26,7 +26,7 @@ export default {
       type: String
     },
     formatView: {
-      default: 'yyyy/mm/dd',
+      default: 'yyyy年mm月dd日',
       type: String
     },
     value: {
@@ -35,12 +35,11 @@ export default {
       type: [Number, String]
     }
   },
-  data () {
-    return {
-      birthday: '',
-      pos: 0
-    }
-  },
+  data : () => ({
+    birthday: '',
+    pos: 0
+  }),
+
   computed: {
   },
   methods: {

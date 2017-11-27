@@ -24,6 +24,8 @@
     "moment": "^2.19.2"
   },
   "scripts": {
+    "test": "cross-env BABEL_ENV=test ./node_modules/.bin/karma start test/karma.config.js",
+    "test:watch": "cross-env BABEL_ENV=test ./node_modules/.bin/karma start test/karma.config.js --single-run=false",
     "lint": "./node_modules/.bin/eslint --ext .js,.vue src spec",
     "build": "./node_modules/.bin/webpack --hide-modules -p --progress",
     "report-coverage": "codecov"
