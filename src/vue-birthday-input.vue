@@ -45,11 +45,11 @@ export default {
     //获得焦点事件
     onFocusHandler (e) {
       this.$emit('focus', e)
-      let pos = this.pos
       if (!this.birthday || this.birthday == this.formatView) {
         this.birthday = this.formatView
-        pos = 0
-        this.setCaretPosition(pos)
+        this.setCaretPosition(0)
+      } else {
+        this.setCaretPosition(this.pos)
       }
     },
     //鼠标经过
@@ -155,6 +155,7 @@ export default {
               }
             }
           } else {
+            this.pos = pos
             this.setCaretPosition(pos)
             return val.join('')
           }
@@ -168,6 +169,7 @@ export default {
         dob = year + month + day + ''
         dob = moment(dob, 'YYYYMMDD').format(this.format)
         this.$emit('input', dob)
+        this.pos = -1
       } else {
         this.$emit('input', '')
       }
