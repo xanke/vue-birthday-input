@@ -1,6 +1,6 @@
 <template>
   <input
-    id="vueBirthdayInput"
+    :id="elementId"
     :placeholder="placeholder"
     @focus="onFocusHandler"
     @click="onFocusHandler"
@@ -36,7 +36,8 @@ export default {
   },
   data : () => ({
     birthday: '',
-    pos: 0
+    pos: 0,
+    elementId: ''
   }),
   computed: {
   },
@@ -65,7 +66,7 @@ export default {
     },
     //获取光标位置
     getCursortPosition() {
-      let ctrl = document.getElementById('vueBirthdayInput')
+      let ctrl = document.getElementById(this.elementId)
       var CaretPos = 0   // IE Support
       if (document.selection) {
         var Sel = document.selection.createRange()
@@ -79,7 +80,7 @@ export default {
     },
     //设置光标位置
     setCaretPosition(pos) {
-      let textDom = document.getElementById('vueBirthdayInput')
+      let textDom = document.getElementById(this.elementId)
       if(textDom.setSelectionRange) {
         // IE Support
         setTimeout(() => {
@@ -100,6 +101,7 @@ export default {
     },
     //格式化
     dobFormat(nVal, del) {
+      nVal = nVal + ''
       let dob = nVal.replace(/[^0-9]/ig, "")
       if (dob.length > 8) {
         return false
@@ -163,7 +165,7 @@ export default {
       }
       //完成输入
       if (dob.length == 8) {
-        dob = year + month + day
+        dob = year + month + day + ''
         dob = moment(dob, 'YYYYMMDD').format(this.format)
         this.$emit('input', dob)
       } else {
@@ -174,14 +176,11 @@ export default {
   },
   watch: {
     birthday (nVal, oVal) {
+    	console.log(nVal, oVal)
       if (nVal !== oVal) {
-        this.$emit('change', nVal)
-        let pos = this.pos
-
         if (nVal === this.formatView || !nVal) {
           return
         }
-
         //正常输入
         let val = this.dobFormat(nVal)
         if (val) {
@@ -189,17 +188,11 @@ export default {
         } else {
           this.birthday = oVal
         }
-
-        if (nVal.length > this.formatView.length) {
-          pos = pos + 1
-          this.pos = pos
-          
-        }
       }
     }
   },
-
   mounted () {
+  	this.elementId = 'vueBirthdayInput_' + Math.round(Math.random() * 1000000)
     let dob = this.dobFormat(this.value)
     if (dob != this.formatView) {
       this.birthday = dob
