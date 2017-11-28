@@ -10,7 +10,6 @@
     v-on:keyup.delete="onDeleteHander"
   >
 </template>
-
 <script>
 import moment from 'moment'
 
@@ -39,7 +38,6 @@ export default {
     birthday: '',
     pos: 0
   }),
-
   computed: {
   },
   methods: {
@@ -47,7 +45,7 @@ export default {
     onFocusHandler (e) {
       this.$emit('focus', e)
       let pos = this.pos
-      if (this.birthday == '' || this.birthday == this.formatView) {
+      if (!this.birthday || this.birthday == this.formatView) {
         this.birthday = this.formatView
         pos = 0
         this.setCaretPosition(pos)
@@ -55,7 +53,7 @@ export default {
     },
     //鼠标经过
     onMouseoverHandel () {
-      if (this.birthday == '') {
+      if (!this.birthday) {
         this.birthday = this.formatView
       }
     },
@@ -87,7 +85,6 @@ export default {
         setTimeout(() => {
           textDom.setSelectionRange(pos, pos)
         }, 0)
-
       } else if (textDom.createTextRange) {
         // Firefox support
         let range = textDom.createTextRange()
@@ -114,13 +111,17 @@ export default {
       //数组化比对
       let val = this.formatView.split('')
       let dk = 0
-
+      let pos = 0
       let year = '', month = '', day = ''
+      //遍历替换
       for (let i = 0; i < val.length; i ++) {
         let item = val[i]
+        //y|m|d提取替换
         item = item.toLowerCase()
         if (item.match(/y|m|d/)) {
+          //如果已输入
           if (dob[dk]) {
+            pos ++
             val[i] = dob[dk]
             if (item == 'y') {
               year = year + dob[dk]
@@ -151,8 +152,13 @@ export default {
                 }
               }
             }
+          } else {
+            this.setCaretPosition(pos)
+            return val.join('')
           }
-          dk = dk + 1
+          dk ++
+        } else {
+          pos ++
         }
       }
       //完成输入
@@ -163,8 +169,7 @@ export default {
       } else {
         this.$emit('input', '')
       }
-      val = val.join('')
-      return val
+      return val.join('')
     }
   },
   watch: {
@@ -188,7 +193,7 @@ export default {
         if (nVal.length > this.formatView.length) {
           pos = pos + 1
           this.pos = pos
-          this.setCaretPosition(pos)
+          
         }
       }
     }

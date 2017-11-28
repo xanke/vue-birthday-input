@@ -1,6 +1,8 @@
 # vue-birthday-input
 vue 生日输入组件
 
+npm install vue-birthday-input --save
+
 [![npm](https://img.shields.io/npm/v/vue-birthday-input.svg)](https://www.npmjs.com/package/vue-birthday-input)
 [![npm](https://img.shields.io/npm/dt/vue-birthday-input.svg)](https://www.npmjs.com/package/vue-birthday-input)
 [![npm](https://img.shields.io/npm/dm/vue-birthday-input.svg)](https://www.npmjs.com/package/vue-birthday-input)
