@@ -176,7 +176,6 @@ export default {
   },
   watch: {
     birthday (nVal, oVal) {
-    	console.log(nVal, oVal)
       if (nVal !== oVal) {
         if (nVal === this.formatView || !nVal) {
           return
@@ -192,7 +191,7 @@ export default {
     }
   },
   mounted () {
-  	this.elementId = 'vueBirthdayInput_' + Math.round(Math.random() * 1000000)
+    this.elementId = 'vueBirthdayInput_' + Math.round(Math.random() * 1000000)
     let dob = this.dobFormat(this.value)
     if (dob != this.formatView) {
       this.birthday = dob
