@@ -6,8 +6,9 @@
     @click="onFocusHandler"
     @mouseover="onMouseoverHandel"
     @mouseout="onMouseoutHandel"
+    @keyup.delete="onDeleteHander"
+    @keyup="onInputHander"
     v-model="birthday"
-    v-on:keyup.delete="onDeleteHander"
   >
 </template>
 <script>
@@ -37,7 +38,8 @@ export default {
   data : () => ({
     birthday: '',
     pos: 0,
-    elementId: ''
+    elementId: '',
+    isInput: false
   }),
   computed: {
   },
@@ -174,6 +176,12 @@ export default {
         this.$emit('input', '')
       }
       return val.join('')
+    },
+    onInputHander(val) {
+      console.log(val)
+      
+      return
+      this.isInput = true
     }
   },
   watch: {
@@ -182,8 +190,12 @@ export default {
         if (nVal === this.formatView || !nVal) {
           return
         }
+        if (!this.isInput) {
+          return
+        }
         //正常输入
         let val = this.dobFormat(nVal)
+        this.isInput = false
         if (val) {
           this.birthday = val
         } else {
