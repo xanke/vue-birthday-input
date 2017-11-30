@@ -7,8 +7,9 @@
     @mouseover="onMouseoverHandel"
     @mouseout="onMouseoutHandel"
     @keyup.delete="onDeleteHander"
-    @keyup="onInputHander"
+    @keyup="onInputHander($event)"
     v-model="birthday"
+    :maxlength="formatView.length"
   >
 </template>
 <script>
@@ -177,20 +178,27 @@ export default {
       }
       return val.join('')
     },
-    onInputHander(val) {
-      console.log(val)
+    onInputHander(e) {
+      let re =  /Digit[0-9]/
+      let birthday = this.birthday
+      if (re.test(e.code)) {
+        let val = e.code.replace('Digit', '')
+
+        birthday = birthday + val
+        // console.log(birthday)
+        // 
+        this.birthday = this.dobFormat(birthday) || this.birthday
+      }
+
+
       
-      return
-      this.isInput = true
+
     }
   },
   watch: {
     birthday (nVal, oVal) {
       if (nVal !== oVal) {
         if (nVal === this.formatView || !nVal) {
-          return
-        }
-        if (!this.isInput) {
           return
         }
         //正常输入
