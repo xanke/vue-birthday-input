@@ -40,13 +40,14 @@ export default {
     birthday: '',
     pos: 0,
     elementId: '',
-    isInput: false
+    isDelete: false,
+
   }),
   computed: {
   },
   methods: {
     //获得焦点事件
-    onFocusHandler (e) {
+    onFocusHandler(e) {
       this.$emit('focus', e)
       if (!this.birthday || this.birthday == this.formatView) {
         this.birthday = this.formatView
@@ -56,13 +57,13 @@ export default {
       }
     },
     //鼠标经过
-    onMouseoverHandel () {
+    onMouseoverHandel() {
       if (!this.birthday) {
         this.birthday = this.formatView
       }
     },
     //鼠标退出
-    onMouseoutHandel () {
+    onMouseoutHandel() {
       if (this.birthday == this.formatView) {
         this.birthday = ''
       }
@@ -99,19 +100,23 @@ export default {
       }
     },
     //回退事件
-    onDeleteHander() {
-      this.birthday = this.dobFormat(this.birthday, true)
+    onDeleteHander(e) {
+      this.isDelete = true
     },
     //格式化
-    dobFormat(nVal, del) {
+    dobFormat(nVal, addVal = '') {
       nVal = nVal + ''
       let dob = nVal.replace(/[^0-9]/ig, "")
       if (dob.length > 8) {
         return false
       }
-      //删除
+      dob = dob + addVal
+
+      let del = this.isDelete
+      // //删除
       if (del) {
         dob = dob.substring(0, dob.length - 1)
+        this.isDelete = false
       }
       //数组化比对
       let val = this.formatView.split('')
@@ -182,17 +187,10 @@ export default {
       let re =  /Digit[0-9]/
       let birthday = this.birthday
       if (re.test(e.code)) {
+        this.isDelete = false
         let val = e.code.replace('Digit', '')
-
-        birthday = birthday + val
-        // console.log(birthday)
-        // 
-        this.birthday = this.dobFormat(birthday) || this.birthday
+        this.birthday = this.dobFormat(birthday, val) || this.birthday
       }
-
-
-      
-
     }
   },
   watch: {
@@ -202,13 +200,7 @@ export default {
           return
         }
         //正常输入
-        let val = this.dobFormat(nVal)
-        this.isInput = false
-        if (val) {
-          this.birthday = val
-        } else {
-          this.birthday = oVal
-        }
+        this.birthday = this.dobFormat(nVal) || oVal
       }
     }
   },
