@@ -84,6 +84,7 @@ export default {
     },
     //设置光标位置
     setCaretPosition(pos) {
+      console.log(pos)
       let textDom = document.getElementById(this.elementId)
       if(textDom.setSelectionRange) {
         // IE Support
@@ -105,6 +106,7 @@ export default {
     },
     //格式化
     dobFormat(nVal, addVal = '') {
+      if (!nVal && !addVal) return
       nVal = nVal + ''
       let dob = nVal.replace(/[^0-9]/ig, "")
       if (dob.length > 8) {
