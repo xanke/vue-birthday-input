@@ -12,7 +12,7 @@
     :maxlength="formatView.length"
   >
 </template>
-<script>
+<script type="module">
 import moment from 'moment'
 
 export default {
@@ -20,7 +20,7 @@ export default {
   props: {
     placeholder: {
       default: '出生日期',
-      type: String,
+      type: String
     },
     format: {
       default: 'YYYYMMDD',
@@ -36,57 +36,48 @@ export default {
       type: [Number, String]
     }
   },
-  data : () => ({
+  data: () => ({
     birthday: '',
+    bir: '',
     pos: 0,
     elementId: '',
-    isDelete: false,
-
+    isDelete: false
   }),
-  computed: {
-  },
+  computed: {},
   methods: {
-    //获得焦点事件
+    // 获得焦点事件
     onFocusHandler(e) {
       this.$emit('focus', e)
-      if (!this.birthday || this.birthday == this.formatView) {
-        this.birthday = this.formatView
-        this.setCaretPosition(0)
-      } else {
-        this.setCaretPosition(this.pos)
-      }
     },
-    //鼠标经过
+    // 鼠标经过
     onMouseoverHandel() {
       if (!this.birthday) {
         this.birthday = this.formatView
       }
     },
-    //鼠标退出
+    // 鼠标退出
     onMouseoutHandel() {
       if (this.birthday == this.formatView) {
         this.birthday = ''
       }
     },
-    //获取光标位置
+    // 获取光标位置
     getCursortPosition() {
       let ctrl = document.getElementById(this.elementId)
-      var CaretPos = 0   // IE Support
+      var CaretPos = 0 // IE Support
       if (document.selection) {
         var Sel = document.selection.createRange()
-        Sel.moveStart ('character', - ctrl.value.length)
+        Sel.moveStart('character', -ctrl.value.length)
         CaretPos = Sel.text.length
-      }
-      // Firefox support
-      else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+      } else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+        // Firefox support
         CaretPos = ctrl.selectionStart
-      return (CaretPos)
+      return CaretPos
     },
-    //设置光标位置
+    // 设置光标位置
     setCaretPosition(pos) {
-      console.log(pos)
       let textDom = document.getElementById(this.elementId)
-      if(textDom.setSelectionRange) {
+      if (textDom.setSelectionRange) {
         // IE Support
         setTimeout(() => {
           textDom.setSelectionRange(pos, pos)
@@ -100,117 +91,119 @@ export default {
         range.select()
       }
     },
-    //回退事件
+    // 回退事件
     onDeleteHander(e) {
-      this.isDelete = true
-    },
-    //格式化
-    dobFormat(nVal, addVal = '') {
-      if (!nVal && !addVal) return
-      nVal = nVal + ''
-      let dob = nVal.replace(/[^0-9]/ig, "")
-      if (dob.length > 8) {
-        return false
-      }
-      dob = dob + addVal
+      let dob = this.bir
+      dob = dob.split('')
 
-      let del = this.isDelete
-      // //删除
-      if (del) {
-        dob = dob.substring(0, dob.length - 1)
-        this.isDelete = false
-      }
-      //数组化比对
-      let val = this.formatView.split('')
-      let dk = 0
-      let pos = 0
-      let year = '', month = '', day = ''
-      //遍历替换
-      for (let i = 0; i < val.length; i ++) {
-        let item = val[i]
-        //y|m|d提取替换
-        item = item.toLowerCase()
-        if (item.match(/y|m|d/)) {
-          //如果已输入
-          if (dob[dk]) {
-            pos ++
-            val[i] = dob[dk]
-            if (item == 'y') {
-              year = year + dob[dk]
-              if (year[0] != 1 && year[0] != 2 ) {
-                return false
-              }
-            }
-            if (item == 'm') {
-              month = month + dob[dk]
-              if (month[0] != 0 && month[0] != 1 ) {
-                return false
-              }
-              if (month.length == 2) {
-                if (moment(month, 'MM').format('MM') == "Invalid date") {
-                  return false
-                }
-              }
-            }
-            if (item == 'd') {
-              day = day + dob[dk]
-              if (day.length == 1) {
-                if (day != 0 && moment(year + month + day + '0', 'YYYYMMDD').format('YYYYMMDD') == "Invalid date") {
-                  return false
-                }
-              } else {
-                if (moment(year + month + day, 'YYYYMMDD').format('YYYYMMDD') == "Invalid date") {
-                  return false
-                }
-              }
-            }
-          } else {
-            this.pos = pos
-            this.setCaretPosition(pos)
-            return val.join('')
-          }
-          dk ++
-        } else {
-          pos ++
+      let key = 0
+      for (let i = 0; i < dob.length; i++) {
+        let val = dob[i]
+        if (val.match(/[0-9]/)) {
+          key = i
         }
       }
-      //完成输入
-      if (dob.length == 8) {
-        dob = year + month + day + ''
-        dob = moment(dob, 'YYYYMMDD').format(this.format)
-        this.$emit('input', dob)
-        this.pos = -1
-      } else {
-        this.$emit('input', '')
-      }
-      return val.join('')
+
+      dob[key] = this.format[key]
+      dob = dob.join('')
+
+      this.bir = this.birthday = dob
+      this.isDelete = true
     },
+    // 提取年月日
+    dobSubstr(val, ymd) {
+      let format = this.formatView
+      format = format.toLowerCase()
+      let st = format.indexOf(ymd)
+      let et = format.lastIndexOf(ymd)
+      val = val.substring(st, et + 1).replace(/[^0-9]/gi, '')
+      return val + ''
+    },
+    // 格式化
+    dobFormat(birthday, value) {
+      if (birthday.length !== this.formatView.length) {
+        this.birthday = this.formatView
+        return
+      }
+
+      let dob = birthday.split('')
+
+      for (let i = 0; i < dob.length; i++) {
+        let val = dob[i]
+        val = val.toLowerCase()
+        if (val.match(/y|m|d/)) {
+          dob[i] = value
+          this.setCaretPosition(i + 1)
+          break
+        }
+      }
+      dob = dob.join('')
+      let year = this.dobSubstr(dob, 'y')
+      let month = this.dobSubstr(dob, 'm')
+      let day = this.dobSubstr(dob, 'd')
+
+      if (year) {
+        if (year[0] != 1 && year[0] != 2) {
+          return false
+        }
+      }
+
+      if (month) {
+        if (month[0] != 0 && month[0] != 1) {
+          return false
+        }
+        if (month.length == 2) {
+          if (moment(month, 'MM').format('x') == 'Invalid date') {
+            return false
+          }
+        }
+      }
+
+      if (day) {
+        let m = month.length == 2 ? month : '12'
+        let y = year.length == 4 ? year : '2000'
+
+        if (day.length == 1) {
+          if (
+            day != 0 &&
+            moment(y + m + day + '0', 'YYYYMMDD').format('x') == 'Invalid date'
+          ) {
+            return false
+          }
+        } else {
+          if (moment(y + m + day, 'YYYYMMDD').format('x') == 'Invalid date') {
+            return false
+          }
+        }
+      }
+
+      this.birthday = dob
+      this.bir = dob
+    },
+    // 输入数字
     onInputHander(e) {
-      let re =  /Digit[0-9]/
+      let re = /Digit[0-9]/
       let birthday = this.birthday
       if (re.test(e.code)) {
-        this.isDelete = false
         let val = e.code.replace('Digit', '')
         this.birthday = this.dobFormat(birthday, val) || this.birthday
       }
     }
   },
   watch: {
-    birthday (nVal, oVal) {
-      if (nVal !== oVal) {
-        if (nVal === this.formatView || !nVal) {
-          return
-        }
-        //正常输入
-        this.birthday = this.dobFormat(nVal) || oVal
-      }
-    }
+    birthday(nVal, oVal) {}
   },
-  mounted () {
+  mounted() {
     this.elementId = 'vueBirthdayInput_' + Math.round(Math.random() * 1000000)
-    let dob = this.dobFormat(this.value)
-    if (dob != this.formatView) {
-      this.birthday = dob
+
+    let value = this.value
+    if (value) {
+      if (value.length !== this.format.length) {
+        return
+      }
+      this.birthday = this.bir = moment(value, this.format).format(
+        this.formatView
+      )
     }
   }
 }
