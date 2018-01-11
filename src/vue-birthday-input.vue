@@ -92,7 +92,7 @@ export default {
       }
     },
     // 回退事件
-    onDeleteHander(e) {
+    onDeleteHander() {
       let dob = this.bir
       dob = dob.split('')
 
@@ -190,9 +190,7 @@ export default {
       }
     }
   },
-  watch: {
-    birthday(nVal, oVal) {}
-  },
+  watch: {},
   mounted() {
     this.elementId = 'vueBirthdayInput_' + Math.round(Math.random() * 1000000)
 
@@ -201,9 +199,10 @@ export default {
       if (value.length !== this.format.length) {
         return
       }
-      this.birthday = this.bir = moment(value, this.format).format(
-        this.formatView
-      )
+
+      let format = this.format.toUpperCase()
+      let formatView = this.formatView.toUpperCase()
+      this.birthday = this.bir = moment(value, format).format(formatView)
     }
   }
 }
