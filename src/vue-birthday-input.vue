@@ -184,9 +184,12 @@ export default {
     onInputHander(e) {
       let re = /Digit[0-9]/
       let birthday = this.birthday
+
       if (re.test(e.code)) {
         let val = e.code.replace('Digit', '')
         this.birthday = this.dobFormat(birthday, val) || this.birthday
+      } else {
+        this.birthday = this.dob
       }
     }
   },

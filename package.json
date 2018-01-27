@@ -1,6 +1,6 @@
 {
   "name": "vue-birthday-input",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Vue birthady input tool",
   "author": "xank",
   "main": "dist/vue-birthday-input.min.js",
